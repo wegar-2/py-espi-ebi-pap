@@ -1,12 +1,13 @@
 from datetime import datetime
+from typing import Any, Literal
 
 from pydantic import BaseModel
 
 
 class Entry(BaseModel):
     source: str
-    dt: datetime
-    relevant_period: str
+    ts: datetime
+    period: Any
     title: str
     url: str
 
