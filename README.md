@@ -22,15 +22,16 @@ You can install it by running:
 pip install git+https://github.com/wegar-2/py-espi-ebi-pap.git@master
 ```
 
-## Examples
 
-As the package is in development, contents of this section are rather limited
-for now. 
-
-### Retrieve All Entries Published on a Given Date
+## Retrieve All Entries Published on a Given Date
 ```python
 from datetime import date
 from pyespiebipap import scrape_date_entries
 
 entries = scrape_date_entries(date(2026, 2, 6))
+```
+
+## Parse Single ESPI/EBI Entry
+```python
+WiP
 ```
