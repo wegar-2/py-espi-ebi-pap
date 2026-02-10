@@ -1,0 +1,22 @@
+[project]
+name = "py-espi-ebi-pap"
+version = "0.0.1"
+description = "ESPI and EBI news feed interface"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+  {name = "Artur Wegrzyn", email = "awegrzyn17@gmail.com" }
+]
+maintainers = [
+  {name = "Artur Wegrzyn", email = "awegrzyn17@gmail.com" }
+]
+dependencies = [
+    "bs4",
+    "pandas",
+    "requests",
+    "flake8"
+]
+
+[build-system]
+requires = ["setuptools>=43.0.0", "wheel"]
+build-backend = "setuptools.build_meta"

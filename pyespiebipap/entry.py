@@ -1,7 +1,9 @@
 from datetime import datetime
-from typing import Any, Literal
+from typing import Any
 
 from pydantic import BaseModel
+
+__all__ = ["Entry"]
 
 
 class Entry(BaseModel):
@@ -10,6 +12,3 @@ class Entry(BaseModel):
     period: Any
     title: str
     url: str
-
-
-__all__ = ["Entry"]

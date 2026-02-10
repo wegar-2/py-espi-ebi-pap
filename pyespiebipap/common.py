@@ -21,7 +21,13 @@ def _make_single_date_url(d: date) -> str:
 
 def _validate_li(li: BSTag) -> None:
 
-    return ""
+    if (div_hour := li.find("div", class_="hour") is None) or len(div_hour) != 2:
+        raise ValueError()
+
+    if li.find("badge") is None:
+        raise ValueError("Entry does not contain info on ")
+
+    return
 
 
 def _full_url_from_node(node: str) -> str:
