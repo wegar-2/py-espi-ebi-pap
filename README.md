@@ -19,7 +19,7 @@ Polish: *Elektroniczna Baza Informacji*, English: *Electronic Information Base*
 This package is in development and is not yet published at PyPI.
 You can install it by running: 
 ```commandline
-pip install 
+pip install git+https://github.com/wegar-2/py-espi-ebi-pap.git@master
 ```
 
 ## Examples
