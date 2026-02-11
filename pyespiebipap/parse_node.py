@@ -40,8 +40,45 @@ def _extract_table_of_contents(
     return pd.concat(rows, axis=0).reset_index(drop=True)
 
 
-def _parse_table_of_contents(response) -> Any:
+def _extract_current_report(
+        response: Response,
+        toc: pd.DataFrame
+) -> Any:
 
+    logger.info("Extracting current report (raport bieżący)")
+
+    soup = bs4.BeautifulSoup(response.text, "lxml")
+
+    container = soup.find("div", class_="arkusz")
+    table = container.find("table")
+
+    rows = table.find_all("tr")
+
+    data = {}
+    last_label = None
+
+    for row in rows:
+        cells = row.find_all("td")
+        texts = [
+            cell.get_text(separator=" ", strip=True)
+            for cell in cells
+            if cell.get_text(strip=True)
+        ]
+
+        if not texts:
+            continue
+
+        if len(texts) == 1:
+            if last_label:
+                data[last_label] += "\n" + texts[0]
+        elif len(texts) >= 2:
+            key = texts[0]
+            value = " ".join(texts[1:])
+
+            data[key] = value
+            last_label = key
+
+    data
     return response
 
 
@@ -68,6 +105,13 @@ def parse_node(node_num: int) -> Any:
     toc: pd.DataFrame = _extract_table_of_contents(
         response=response, node_num=node_num)
 
+    current_report = _extract_current_report(response=response, toc=toc)
+
+    logger.info("Processing entity info (informacje o podmiocie)")
+    logger.info("Processing signatures of representatives (PODPISY OSÓB REPREZENTUJĄCYCH SPÓŁKĘ)")
+
+
 
 if __name__ == "__main__":
     parse_node(node_num=714972)
+
