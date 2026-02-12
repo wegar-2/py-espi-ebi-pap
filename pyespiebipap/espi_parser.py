@@ -93,21 +93,43 @@ def _extract_entity_info():
     pass
 
 
-def _extract_signatures():
-    pass
+def _extract_signatures(soup: BSSoup) -> pd.DataFrame:
+    res = [
+        x
+        for x in soup.find_all("div", class_="arkusz")
+        if x.find(string="PODPISY OSÓB REPREZENTUJĄCYCH SPÓŁKĘ")
+    ]
+    section = res[0]
+    table = section.find("table")
+    rows = table.find_all("tr")
+    headers = [
+        cell.get_text(strip=True)
+        for cell in rows[1].find_all("td")
+        if cell.get_text(strip=True)
+    ]
+    results = []
+    for row in rows[2:]:
+        cells = [
+            cell.get_text(strip=True)
+            for cell in row.find_all("td")
+            if cell.get_text(strip=True)
+        ]
+        if cells:
+            results.append(dict(zip(headers, cells)))
 
-
-def _extract_attachments():
-    pass
+    return pd.DataFrame()
 
 
 def parse_espi_node_soup(soup: BSSoup) -> ESPINode:
     toc: pd.DataFrame = _extract_table_of_contents(soup=soup)
     current_report = _extract_current_report(soup=soup)
 
+    signatures = _extract_signatures(soup=soup)
+
     return ESPINode(
         toc=toc,
-        current_report=current_report
+        current_report=current_report,
+        signatures=signatures,
     )
 
 
