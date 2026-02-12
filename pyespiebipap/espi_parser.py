@@ -36,6 +36,20 @@ def _extract_table_of_contents(soup: BSSoup) -> pd.DataFrame:
     return pd.concat(rows, axis=0).reset_index(drop=True)
 
 
+def _extract_top_entity_info(soup: BSSoup) -> pd.DataFrame:
+    table_info = soup.find("table", class_="nDokument")
+    rows = table_info.find_all("tr")
+    parsed_rows: list[dict] = []
+    for row in rows:
+        # row = rows[0]
+        name, value = row.find_all("td")
+        parsed_rows.append({
+            "name": name.get_text(strip=True),
+            "value": value.get_text(strip=True)
+        })
+    return pd.DataFrame(data=parsed_rows)
+
+
 def _extract_single_line_entry_from_soup(soup: BSSoup, name: str):
     for row in soup.find_all("tr"):
         cells = row.find_all("td")
@@ -47,7 +61,7 @@ def _extract_single_line_entry_from_soup(soup: BSSoup, name: str):
                     if c.get_text(strip=True) != name
                 )
                 return result
-    raise Exception
+    raise Exception()
 
 
 def _extract_two_lines_entry_from_soup(soup: BSSoup, name: str):
@@ -60,7 +74,7 @@ def _extract_two_lines_entry_from_soup(soup: BSSoup, name: str):
                     value_cell = next_row.find("td", colspan="11")
                     if value_cell:
                         return value_cell.get_text(strip=True)
-    raise Exception
+    raise Exception()
 
 
 def _extract_current_report(soup: BSSoup) -> Any:
@@ -181,19 +195,10 @@ def _extract_signatures(soup: BSSoup) -> pd.DataFrame:
 
 
 def parse_espi_node_soup(soup: BSSoup) -> ESPINode:
-    toc: pd.DataFrame = _extract_table_of_contents(soup=soup)
-    current_report = _extract_current_report(soup=soup)
-    signatures: pd.DataFrame = _extract_signatures(soup=soup)
-    entity_info = _extract_entity_info(soup=soup)
     return ESPINode(
-        toc=toc,
-        current_report=current_report,
-        signatures=signatures,
-        entity_info=entity_info
+        toc=_extract_table_of_contents(soup=soup),
+        top_entity_info=_extract_top_entity_info(soup=soup),
+        current_report=_extract_current_report(soup=soup),
+        signatures=_extract_signatures(soup=soup),
+        entity_info=_extract_entity_info(soup=soup),
     )
-
-
-if __name__ == "__main__":
-    from pyespiebipap.common import make_node_soup
-    soup = make_node_soup(node_id=714972)
-    node = parse_espi_node_soup(soup=soup)
