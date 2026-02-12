@@ -1,5 +1,7 @@
 # py-espi-ebi-pap
 
+![Flake8 Lint Check](https://github.com/wegar-2/py-espi-ebi-pap-api/actions/workflows/flake8-lint.yml/badge.svg)
+
 ## ESPI, EBI and PAP
 This package provides interface for retrieval of
 data published at the 
