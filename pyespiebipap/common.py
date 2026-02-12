@@ -1,6 +1,5 @@
 from datetime import date, datetime
 import logging
-from typing import TypeAlias
 
 import bs4
 import pandas as pd
@@ -8,12 +7,16 @@ import requests
 
 from pyespiebipap.constants import DEFAULT_DATE_FORMAT
 from pyespiebipap.entry import Entry
+from pyespiebipap.types import BSTag, Response, BSSoup, NodeSource
 
 logger = logging.getLogger(__name__)
 
-__all__ = ["scrape_date_entries", "BSTag"]
-
-BSTag: TypeAlias = bs4.element.Tag
+__all__ = [
+    "extract_node_source",
+    "scrape_date_entries",
+    "make_node_url",
+    "make_node_soup"
+]
 
 
 def _make_single_date_url(d: date) -> str:
@@ -111,3 +114,22 @@ def scrape_date_entries(d: date):
     ).sort_values(by="dt", ascending=True).reset_index(drop=True)
 
     return data
+
+
+def make_node_url(node_id: int) -> str:
+    return f"https://espiebi.pap.pl/node/{node_id}"
+
+
+def make_node_soup(node_id: int):
+    logger.info(f"Making bs4 soup from PAP ESPI/EBI node {node_id}")
+    node_url = make_node_url(node_id=node_id)
+    response: Response = requests.get(node_url)
+    response.raise_for_status()
+    soup = bs4.BeautifulSoup(response.text, "lxml")
+    return soup
+
+
+def extract_node_source(node_soup: BSSoup) -> NodeSource:
+
+
+    return "ESPI"

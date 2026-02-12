@@ -1,22 +1,19 @@
 import logging
-from typing import Any, TypeAlias
+from typing import Any, Optional, TypeAlias
 
 import bs4
 import pandas as pd
 import requests
 
-from pyespiebipap.common import BSTag
+from pyespiebipap.common import BSTag, NodeSource, BSSoup
+from pyespiebipap.common import extract_node_source
 
 Response: TypeAlias = requests.models.Response
 
 
-__all__ = ["parse_node"]
+__all__ = ["parse_node_soup"]
 
 logger = logging.getLogger(__name__)
-
-
-def _make_node_id(node_num: int) -> str:
-    return f"https://espiebi.pap.pl/node/{node_num}"
 
 
 def _extract_table_of_contents(
@@ -94,7 +91,10 @@ def _extract_attachments():
     pass
 
 
-def parse_node(node_num: int) -> Any:
+def parse_node_soup(
+        node_soup: BSSoup,
+        node_source: Optional[NodeSource] = None
+) -> Any:
 
     node_url: str = _make_node_id(node_num=node_num)
 
@@ -113,5 +113,5 @@ def parse_node(node_num: int) -> Any:
 
 
 if __name__ == "__main__":
-    parse_node(node_num=714972)
-
+    # parse_node_soup()
+    pass
