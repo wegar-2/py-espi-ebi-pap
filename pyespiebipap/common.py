@@ -133,3 +133,11 @@ def extract_node_source(node_soup: BSSoup) -> NodeSource:
 
 
     return "ESPI"
+
+
+if __name__ == "__main__":
+
+    node_id = 714972
+    soup = make_node_soup(node_id=node_id)
+    extract_node_source(node_soup=soup)
+
