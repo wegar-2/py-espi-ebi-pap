@@ -1,6 +1,12 @@
-from .common import scrape_date_entries
+from .common import scrape_date_entries, make_node_soup, extract_node_source
+from .espi_parser import parse_espi_node_soup
 
-__all__ = ["scrape_date_entries"]
+__all__ = [
+    "extract_node_source",
+    "make_node_soup",
+    "parse_espi_node_soup",
+    "scrape_date_entries",
+]
 
 import logging
 

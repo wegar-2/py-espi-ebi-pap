@@ -16,6 +16,5 @@ class ESPINode(BaseModel):
     attachments: Optional[list[Any]] = None
 
 
-
 class EBINode(BaseModel):
     pass

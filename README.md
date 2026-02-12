@@ -23,7 +23,9 @@ pip install git+https://github.com/wegar-2/py-espi-ebi-pap.git@master
 ```
 
 
-## Retrieve All Entries Published on a Given Date
+## Examples
+
+### Retrieve All Entries Published on a Given Date
 ```python
 from datetime import date
 from pyespiebipap import scrape_date_entries
@@ -31,7 +33,27 @@ from pyespiebipap import scrape_date_entries
 entries = scrape_date_entries(date(2026, 2, 6))
 ```
 
-## Parse Single ESPI/EBI Entry
+### Get bs4 Soup from Node by ID
 ```python
-WiP
+from pyespiebipap import make_node_soup
+
+node = make_node_soup(node_id=715_032)
+```
+
+### Check if Node is an ESPI or EBI Node
+```python
+from pyespiebipap import extract_node_source, make_node_soup
+
+source = extract_node_source(
+    node_soup=make_node_soup(node_id=715_032)
+)
+print(f"{source=}")
+```
+
+### Parse Single ESPI Node
+```python
+from pyespiebipap import parse_espi_node_soup, make_node_soup
+node_data = parse_espi_node_soup(
+    soup=make_node_soup(node_id=715_032)
+)
 ```
